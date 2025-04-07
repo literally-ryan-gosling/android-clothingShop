@@ -34,22 +34,22 @@
     <string-array name="shopping_item_names">
         <item>Sapka</item>
         <item>Polo</item>
+        <item>Polo</item>
         <item>Pulover</item>
+        <item>Polo</item>
+        <item>Polo</item>
+        <item>Polo</item>
+        <item>Polo</item>
+        <item>Polo</item>
+        <item>Polo</item>
+        <item>Polo</item>
         <item>Hoodie</item>
-        <item>Polo</item>
-        <item>Polo</item>
-        <item>Polo</item>
-        <item>Polo</item>
-        <item>Polo</item>
-        <item>Polo</item>
-        <item>Polo</item>
-        <item>Polo</item>
-        <item>Polo</item>
         <item>Polo</item>
     </string-array>
 
     <string-array name="shopping_item_desc">
         <item>Pamut sapka</item>
+        <item>Pamut polo</item>
         <item>Pamut polo</item>
         <item>Pamut pulover</item>
         <item>Pamut polo</item>
@@ -59,9 +59,7 @@
         <item>Pamut polo</item>
         <item>Pamut polo</item>
         <item>Pamut polo</item>
-        <item>Pamut polo</item>
-        <item>Pamut polo</item>
-        <item>Pamut polo</item>
+        <item>Pamut Hoodie</item>
         <item>Pamut polo</item>
     </string-array>
 
@@ -70,7 +68,6 @@
         <item>5</item>
         <item>4</item>
         <item>2</item>
-        <item>5</item>
         <item>5</item>
         <item>5</item>
         <item>5</item>
@@ -96,7 +93,6 @@
         <item>@drawable/red_tshirt_lactose</item>
         <item>@drawable/black_hoodie_lactose</item>
         <item>@drawable/black_tshirt_lactose</item>
-        <item>@drawable/black_tanktop_lactose</item>
     </array>
 
     <array name="shopping_item_price">
@@ -113,6 +109,5 @@
         <item>12000 Dv</item>
         <item>18000 Dv</item>
         <item>12000 Dv</item>
-        <item>10000 Dv</item>
     </array>
 </resources>
