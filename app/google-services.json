@@ -1,0 +1,47 @@
+{
+  "project_info": {
+    "project_number": "893587932989",
+    "project_id": "androidclothingshop-4064b",
+    "storage_bucket": "androidclothingshop-4064b.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:893587932989:android:4f1228575d37e636cc2754",
+        "android_client_info": {
+          "package_name": "com.example.clothingshop"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "893587932989-j0bf7cnuc10fa5j18saiu7ebutfcnpv8.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.clothingshop",
+            "certificate_hash": "565f44de860234262b1d61a54bb71fd176ed9f3c"
+          }
+        },
+        {
+          "client_id": "893587932989-8ohki6o12kn1mgqfpesrn4rjh69sd6mu.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDJreip7VhV5pvXWYJWiEVd0KiFhsbYGp8"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "893587932989-8ohki6o12kn1mgqfpesrn4rjh69sd6mu.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

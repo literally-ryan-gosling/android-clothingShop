@@ -1,0 +1,118 @@
+<resources>
+    <string name="app_name">Lactose 💩🐊 - The ClothingShop</string>
+    <string name="name">Név</string>
+    <string name="password">Jelszó</string>
+    <string name="login">Bejelentkezés</string>
+    <string name="registration">Regisztráció</string>
+    <string name="loginGuest">Egy pillanat</string>
+    <string name="loginWithGoogle">Bejelentkezés Google fiókkal</string>
+    <string name="user_name">Felhasználónév</string>
+    <string name="email_address">E-mail cím</string>
+    <string name="password_again">Jelszó megerősítése</string>
+    <string name="cancel">Mégse</string>
+    <string name="phone_number">Telefonszám</string>
+    <string name="address">Cím</string>
+    <string name="account_type">Fiók típusa</string>
+    <string name="customer">Vásárló</string>
+    <string name="seller">Eladó</string>
+    <string name="product_description">Termék leírása.</string>
+
+    <string name="title_placeholder">Title</string>
+    <string name="item_placeholder">Leírás</string>
+    <string name="item_info_placeholder">Here is some news</string>
+    <string name="subtitle_detail_text">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Praesent ultrices congue rutrum. Phasellus elementum ipsum ac convallis aliquam. Suspendisse eleifend eros a enim faucibus mollis. Nunc placerat, est vitae vestibulum blandit, dolor diam fringilla tellus, eu euismod mauris neque at neque.</string>
+    <string name="to_cart">Kosárba</string>
+    <string name="delete">Törlés</string>
+
+    <string-array name="phone_labels">
+        <item>Otthon</item>
+        <item>Munkahely</item>
+        <item>Mobil</item>
+        <item>Egyéb</item>
+    </string-array>
+
+    <string-array name="shopping_item_names">
+        <item>Sapka</item>
+        <item>Polo</item>
+        <item>Pulover</item>
+        <item>Hoodie</item>
+        <item>Polo</item>
+        <item>Polo</item>
+        <item>Polo</item>
+        <item>Polo</item>
+        <item>Polo</item>
+        <item>Polo</item>
+        <item>Polo</item>
+        <item>Polo</item>
+        <item>Polo</item>
+        <item>Polo</item>
+    </string-array>
+
+    <string-array name="shopping_item_desc">
+        <item>Pamut sapka</item>
+        <item>Pamut polo</item>
+        <item>Pamut pulover</item>
+        <item>Pamut polo</item>
+        <item>Pamut polo</item>
+        <item>Pamut polo</item>
+        <item>Pamut polo</item>
+        <item>Pamut polo</item>
+        <item>Pamut polo</item>
+        <item>Pamut polo</item>
+        <item>Pamut polo</item>
+        <item>Pamut polo</item>
+        <item>Pamut polo</item>
+        <item>Pamut polo</item>
+    </string-array>
+
+    <array name="shopping_item_rates">
+        <item>3.5</item>
+        <item>5</item>
+        <item>4</item>
+        <item>2</item>
+        <item>5</item>
+        <item>5</item>
+        <item>5</item>
+        <item>5</item>
+        <item>5</item>
+        <item>5</item>
+        <item>5</item>
+        <item>5</item>
+        <item>5</item>
+        <item>5</item>
+    </array>
+
+    <array name="shopping_item_images">
+        <item>@drawable/cap_lacoste</item>
+        <item>@drawable/white_cap_lactose</item>
+        <item>@drawable/t_shirt_lacoste</item>
+        <item>@drawable/sweatshirt_lacoste_black</item>
+        <item>@drawable/brown_tshirt_lactose</item>
+        <item>@drawable/green_tshirt_lactose</item>
+        <item>@drawable/pink_tshirt_lactose</item>
+        <item>@drawable/blue_tshirt_lactose</item>
+        <item>@drawable/yellow_tshirt_lactose</item>
+        <item>@drawable/purple_tshirt_lactose</item>
+        <item>@drawable/red_tshirt_lactose</item>
+        <item>@drawable/black_hoodie_lactose</item>
+        <item>@drawable/black_tshirt_lactose</item>
+        <item>@drawable/black_tanktop_lactose</item>
+    </array>
+
+    <array name="shopping_item_price">
+        <item>5000 Dv</item>
+        <item>6000 Dv</item>
+        <item>12000 Dv</item>
+        <item>16000 Dv</item>
+        <item>12000 Dv</item>
+        <item>12000 Dv</item>
+        <item>12000 Dv</item>
+        <item>12000 Dv</item>
+        <item>12000 Dv</item>
+        <item>12000 Dv</item>
+        <item>12000 Dv</item>
+        <item>18000 Dv</item>
+        <item>12000 Dv</item>
+        <item>10000 Dv</item>
+    </array>
+</resources>
