@@ -73,13 +73,13 @@
                 android:backgroundTint="@color/deleteBtn"
                 android:text="@string/to_cart" />
 
-            <Button
+            <!--<Button
                 android:id="@+id/delete"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_margin="5dp"
                 android:backgroundTint="@color/addToCartBtn"
-                android:text="@string/delete" />
+                android:text="@string/delete" />-->
         </LinearLayout>
 
     </RelativeLayout>
