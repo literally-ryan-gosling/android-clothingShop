@@ -33,7 +33,6 @@ public class CartActivity extends AppCompatActivity {
         setContentView(R.layout.activity_cart);
 
         try {
-            // Inicializálás
             mRecyclerView = findViewById(R.id.cartRecyclerView);
             mTotalPrice = findViewById(R.id.totalPrice);
             mClearCart = findViewById(R.id.clearCart);
@@ -52,7 +51,6 @@ public class CartActivity extends AppCompatActivity {
             mRecyclerView.setLayoutManager(new LinearLayoutManager(this));
             mRecyclerView.setAdapter(mAdapter);
 
-            // Összeg frissítése
             updateTotalPrice();
 
             // Gomb eseményfigyelők
@@ -65,8 +63,6 @@ public class CartActivity extends AppCompatActivity {
         }
     }
 
-    // CartActivity.java
-// Változtasd privátról protected-re vagy public-ra
     protected void updateTotalPrice() {
         if (mCartItems == null) {
             mCartItems = new ArrayList<>();
@@ -107,7 +103,7 @@ public class CartActivity extends AppCompatActivity {
         setResult(RESULT_OK, resultIntent);
 
         Toast.makeText(this, "A kosár kiürítve", Toast.LENGTH_SHORT).show();
-        finish(); // Visszalépünk a főoldalra
+        finish();
     }
 
     private void checkout() {
@@ -116,7 +112,6 @@ public class CartActivity extends AppCompatActivity {
             return;
         }
 
-        // Itt lehetne Firebase-ba menteni a rendelést
         FirebaseFirestore.getInstance().collection("Orders").add(createOrderData())
                 .addOnSuccessListener(documentReference -> {
                     Toast.makeText(this, "Rendelés elküldve", Toast.LENGTH_SHORT).show();

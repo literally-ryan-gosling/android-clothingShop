@@ -34,7 +34,7 @@ public class CartManager {
         }
 
         if (!itemExists) {
-            item.setQuantity(1); // Alapértelmezett mennyiség
+            item.setQuantity(1);
             cartItems.add(item);
         }
 
@@ -68,7 +68,7 @@ public class CartManager {
     }
 
     public List<ShoppingItem> getCartItems() {
-        String json = sharedPreferences.getString(CART_ITEMS_KEY, "[]"); // Alapértelmezett "[]" üres tömb
+        String json = sharedPreferences.getString(CART_ITEMS_KEY, "[]");
 
         try {
             Type type = new TypeToken<ArrayList<ShoppingItem>>() {}.getType();

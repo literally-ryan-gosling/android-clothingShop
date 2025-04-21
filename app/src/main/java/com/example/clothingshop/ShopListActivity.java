@@ -58,7 +58,6 @@ public class ShopListActivity extends AppCompatActivity {
     private int gridNumber = 1;
     private Integer itemLimit = 5;
 
-    // Member variables.
     private RecyclerView mRecyclerView;
     private ArrayList<ShoppingItem> mItemsData;
     private ShoppingItemAdapter mAdapter;
@@ -73,8 +72,8 @@ public class ShopListActivity extends AppCompatActivity {
 
     private boolean viewRow = true;
 
-    private boolean isPriceDescending = true; // Kezdetben legdrágább elől
-    private MenuItem sortMenuItem; // Referencia a menüelemhez
+    private boolean isPriceDescending = true;
+    private MenuItem sortMenuItem;
 
     private CartManager cartManager;
 
@@ -100,12 +99,9 @@ public class ShopListActivity extends AppCompatActivity {
 
         // recycle view
         mRecyclerView = findViewById(R.id.recyclerView);
-        // Set the Layout Manager.
         mRecyclerView.setLayoutManager(new GridLayoutManager(
                 this, gridNumber));
-        // Initialize the ArrayList that will contain the data.
         mItemsData = new ArrayList<>();
-        // Initialize the adapter and set it to the RecyclerView.
         mAdapter = new ShoppingItemAdapter(this, mItemsData);
         mRecyclerView.setAdapter(mAdapter);
 
@@ -169,7 +165,6 @@ public class ShopListActivity extends AppCompatActivity {
     };
 
     private void initializeData() {
-        // Get the resources from the XML file.
         String[] itemsList = getResources()
                 .getStringArray(R.array.shopping_item_names);
         String[] itemsInfo = getResources()
@@ -180,8 +175,6 @@ public class ShopListActivity extends AppCompatActivity {
                 getResources().obtainTypedArray(R.array.shopping_item_images);
         TypedArray itemRate = getResources().obtainTypedArray(R.array.shopping_item_rates);
 
-        // Create the ArrayList of Sports objects with the titles and
-        // information about each sport.
         for (int i = 0; i < itemsList.length; i++) {
             mItems.add(new ShoppingItem(
                     itemsList[i],
@@ -192,7 +185,6 @@ public class ShopListActivity extends AppCompatActivity {
                     0));
         }
 
-        // Recycle the typed array.
         itemsImageResources.recycle();
     }
 
@@ -258,7 +250,7 @@ public class ShopListActivity extends AppCompatActivity {
     private void queryDataByRating() {
         mItemsData.clear();
         mItems.orderBy("ratedInfo", Query.Direction.DESCENDING) // Legmagasabb értékelésű elől
-                .limit(itemLimit) // Korlátozás (5 vagy 14 elem)
+                .limit(itemLimit)
                 .get()
                 .addOnSuccessListener(queryDocumentSnapshots -> {
                     for (QueryDocumentSnapshot document : queryDocumentSnapshots) {
@@ -321,8 +313,6 @@ public class ShopListActivity extends AppCompatActivity {
                 FirebaseAuth.getInstance().signOut();
                 finish();
                 return true;
-            // Az onOptionsItemSelected-ben módosítsd a kosár esetet:
-            // Az onOptionsItemSelected-ben
             case R.id.cart:
                 Log.d(LOG_TAG, "Cart clicked!");
                 try {
