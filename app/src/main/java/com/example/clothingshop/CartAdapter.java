@@ -3,6 +3,8 @@ package com.example.clothingshop;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -17,6 +19,7 @@ import java.util.ArrayList;
 public class CartAdapter extends RecyclerView.Adapter<CartAdapter.ViewHolder> {
     private final ArrayList<ShoppingItem> mCartItems;
     private final CartActivity mContext;
+    private int lastAnimatedPosition = -1;
 
     public CartAdapter(CartActivity context, ArrayList<ShoppingItem> cartItems) {
         this.mContext = context;
@@ -33,53 +36,65 @@ public class CartAdapter extends RecyclerView.Adapter<CartAdapter.ViewHolder> {
 
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
-        ShoppingItem currentItem = mCartItems.get(position);
+        // Mindig a legfrissebb pozíciót használjuk
+        final int adapterPosition = holder.getAdapterPosition();
+        if (adapterPosition == RecyclerView.NO_POSITION) {
+            return;
+        }
 
-        holder.mTitleText.setText(currentItem.getName());
-        holder.mPriceText.setText(currentItem.getPrice());
-        holder.mQuantityText.setText(String.valueOf(currentItem.getQuantity()));
-        Glide.with(mContext).load(currentItem.getImageResource()).into(holder.mItemImage);
+        ShoppingItem currentItem = mCartItems.get(adapterPosition);
+        holder.bind(currentItem);
 
         // Mennyiség növelése
         holder.mIncreaseButton.setOnClickListener(v -> {
-            currentItem.increaseQuantity();
-            holder.mQuantityText.setText(String.valueOf(currentItem.getQuantity()));
-
-            // Frissítjük a CartManager-ben is
-            ((CartActivity)mContext).getCartManager().updateItemQuantity(
-                    currentItem._getId(),
-                    currentItem.getQuantity()
-            );
-
-            // Frissítjük az összeget
-            ((CartActivity)mContext).updateTotalPrice();
-        });
-
-        holder.mDecreaseButton.setOnClickListener(v -> {
-            if (currentItem.getQuantity() > 1) {
-                currentItem.decreaseQuantity();
+            int currentPosition = holder.getAdapterPosition();
+            if (currentPosition != RecyclerView.NO_POSITION) {
+                currentItem.increaseQuantity();
                 holder.mQuantityText.setText(String.valueOf(currentItem.getQuantity()));
-
-                // Frissítjük a CartManager-ben is
-                ((CartActivity)mContext).getCartManager().updateItemQuantity(
+                mContext.getCartManager().updateItemQuantity(
                         currentItem._getId(),
                         currentItem.getQuantity()
                 );
-            } else {
-                mCartItems.remove(position);
-                notifyItemRemoved(position);
-                notifyItemRangeChanged(position, mCartItems.size());
-
-                // Frissítjük a CartManager-ben is
-                ((CartActivity)mContext).getCartManager().updateItemQuantity(
-                        currentItem._getId(),
-                        0
-                );
+                mContext.updateTotalPrice();
             }
-
-            // Frissítjük az összeget
-            ((CartActivity)mContext).updateTotalPrice();
         });
+
+        // Mennyiség csökkentése
+        holder.mDecreaseButton.setOnClickListener(v -> {
+            int currentPosition = holder.getAdapterPosition();
+            if (currentPosition != RecyclerView.NO_POSITION) {
+                if (currentItem.getQuantity() > 1) {
+                    currentItem.decreaseQuantity();
+                    holder.mQuantityText.setText(String.valueOf(currentItem.getQuantity()));
+                    mContext.getCartManager().updateItemQuantity(
+                            currentItem._getId(),
+                            currentItem.getQuantity()
+                    );
+                } else {
+                    mCartItems.remove(currentPosition);
+                    notifyItemRemoved(currentPosition);
+                    notifyItemRangeChanged(currentPosition, mCartItems.size());
+                    mContext.getCartManager().updateItemQuantity(
+                            currentItem._getId(),
+                            0
+                    );
+                }
+                mContext.updateTotalPrice();
+            }
+        });
+
+        // Animáció alkalmazása (csak ha még nem animáltuk ezt a pozíciót)
+        if (adapterPosition > lastAnimatedPosition) {
+            Animation animation = AnimationUtils.loadAnimation(mContext, R.anim.slide_in_cart_item);
+            holder.itemView.startAnimation(animation);
+            lastAnimatedPosition = adapterPosition;
+        }
+    }
+
+    @Override
+    public void onViewDetachedFromWindow(@NonNull ViewHolder holder) {
+        super.onViewDetachedFromWindow(holder);
+        holder.itemView.clearAnimation();
     }
 
     @Override
@@ -103,6 +118,13 @@ public class CartAdapter extends RecyclerView.Adapter<CartAdapter.ViewHolder> {
             mItemImage = itemView.findViewById(R.id.cartItemImage);
             mIncreaseButton = itemView.findViewById(R.id.increaseButton);
             mDecreaseButton = itemView.findViewById(R.id.decreaseButton);
+        }
+
+        public void bind(ShoppingItem item) {
+            mTitleText.setText(item.getName());
+            mPriceText.setText(item.getPrice());
+            mQuantityText.setText(String.valueOf(item.getQuantity()));
+            Glide.with(itemView.getContext()).load(item.getImageResource()).into(mItemImage);
         }
     }
 }
