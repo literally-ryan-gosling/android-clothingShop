@@ -1,6 +1,8 @@
 package com.example.clothingshop;
 
-public class ShoppingItem {
+import java.io.Serializable;
+
+public class ShoppingItem implements Serializable {
     private String id;
     private String name;
     private String info;
@@ -8,6 +10,7 @@ public class ShoppingItem {
     private float ratedInfo;
     private int imageResource;
     private int cartedCount;
+    private int quantity = 1;
 
     public ShoppingItem(String name, String info, String price, float ratedInfo, int imageResource, int cartedCount) {
         this.name = name;
@@ -20,7 +23,25 @@ public class ShoppingItem {
 
     public ShoppingItem() {
     }
+    public int getQuantity() {
+        return quantity;
+    }
 
+    public void setQuantity(int quantity) {
+        this.quantity = quantity;
+    }
+
+    // Helper metódus a mennyiség növeléséhez
+    public void increaseQuantity() {
+        this.quantity++;
+    }
+
+    // Helper metódus a mennyiség csökkentéséhez
+    public void decreaseQuantity() {
+        if (this.quantity > 1) {
+            this.quantity--;
+        }
+    }
     public String getName() {
         return name;
     }

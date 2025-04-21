@@ -9,6 +9,20 @@
         app:actionViewClass="android.widget.SearchView"
         >
     </item>
+
+    <item
+        android:id="@+id/sort_by_price"
+        app:showAsAction="always"
+        android:title="Ár szerint"
+        android:icon="@drawable/ic_arrow_down"
+    />
+
+    <item
+        android:id="@+id/sort_by_rating"
+        android:title="Értékelés szerint"
+        android:icon="@drawable/ic_star"
+    app:showAsAction="always" />
+
     <item
         android:id="@+id/cart"
         app:showAsAction="always"

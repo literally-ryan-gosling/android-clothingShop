@@ -73,6 +73,11 @@ public class ShopListActivity extends AppCompatActivity {
 
     private boolean viewRow = true;
 
+    private boolean isPriceDescending = true; // Kezdetben legdrágább elől
+    private MenuItem sortMenuItem; // Referencia a menüelemhez
+
+    private CartManager cartManager;
+
     @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -119,8 +124,27 @@ public class ShopListActivity extends AppCompatActivity {
         mNotificationHelper = new NotificationHelper(this);
         mAlarmManager = (AlarmManager) getSystemService(ALARM_SERVICE);
         mJobScheduler = (JobScheduler) getSystemService(JOB_SCHEDULER_SERVICE);
+
+        cartManager = new CartManager(this);
         // setAlarmManager();
         setJobScheduler();
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (resultCode == RESULT_OK && data != null) {
+            if (data.getBooleanExtra("cartCleared", false)) {
+                updateCartIcon();
+            }
+        }
+    }
+
+    // Új segédfüggvény a kosár ikon frissítésére
+    private void updateCartIcon() {
+        int cartItemCount = cartManager.getCartItems().size();
+        countTextView.setText(cartItemCount > 0 ? String.valueOf(cartItemCount) : "");
+        redCircle.setVisibility(cartItemCount > 0 ? VISIBLE : GONE);
     }
 
     BroadcastReceiver powerReceiver = new BroadcastReceiver() {
@@ -192,6 +216,8 @@ public class ShopListActivity extends AppCompatActivity {
                 });
     }
 
+
+
     public void deleteItem(ShoppingItem item) {
         DocumentReference ref = mItems.document(item._getId());
         ref.delete()
@@ -210,6 +236,7 @@ public class ShopListActivity extends AppCompatActivity {
     public boolean onCreateOptionsMenu(Menu menu) {
         super.onCreateOptionsMenu(menu);
         getMenuInflater().inflate(R.menu.shop_list_menu, menu);
+        sortMenuItem = menu.findItem(R.id.sort_by_price);
         MenuItem menuItem = menu.findItem(R.id.search_bar);
         SearchView searchView = (SearchView) MenuItemCompat.getActionView(menuItem);
         searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
@@ -228,9 +255,62 @@ public class ShopListActivity extends AppCompatActivity {
         return true;
     }
 
+    private void queryDataByRating() {
+        mItemsData.clear();
+        mItems.orderBy("ratedInfo", Query.Direction.DESCENDING) // Legmagasabb értékelésű elől
+                .limit(itemLimit) // Korlátozás (5 vagy 14 elem)
+                .get()
+                .addOnSuccessListener(queryDocumentSnapshots -> {
+                    for (QueryDocumentSnapshot document : queryDocumentSnapshots) {
+                        ShoppingItem item = document.toObject(ShoppingItem.class);
+                        item.setId(document.getId());
+                        mItemsData.add(item);
+                    }
+                    mAdapter.notifyDataSetChanged();
+                });
+    }
+
+    private void queryDataByPrice() {
+        mItemsData.clear();
+        mItems.orderBy("price", isPriceDescending ?
+                        Query.Direction.DESCENDING :
+                        Query.Direction.ASCENDING)
+                .limit(itemLimit)
+                .get()
+                .addOnSuccessListener(queryDocumentSnapshots -> {
+                    for (QueryDocumentSnapshot document : queryDocumentSnapshots) {
+                        ShoppingItem item = document.toObject(ShoppingItem.class);
+                        item.setId(document.getId());
+                        mItemsData.add(item);
+                    }
+                    mAdapter.notifyDataSetChanged();
+                });
+    }
+
+    private void togglePriceSorting() {
+        isPriceDescending = !isPriceDescending; // Váltunk a két állapot között
+
+        // Ikon frissítése
+        sortMenuItem.setIcon(isPriceDescending ?
+                R.drawable.ic_arrow_down :
+                R.drawable.ic_arrow_up);
+
+        queryDataByPrice();
+    }
+
+    private ArrayList<ShoppingItem> getCartItems() {
+        return new ArrayList<>(cartManager.getCartItems());
+    }
+
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
+            case R.id.sort_by_price:
+                togglePriceSorting();
+                return true;
+            case R.id.sort_by_rating:
+                queryDataByRating();
+                return true;
             case R.id.log_out_button:
                 Log.d(LOG_TAG, "Logout clicked!");
                 FirebaseAuth.getInstance().signOut();
@@ -241,8 +321,17 @@ public class ShopListActivity extends AppCompatActivity {
                 FirebaseAuth.getInstance().signOut();
                 finish();
                 return true;
+            // Az onOptionsItemSelected-ben módosítsd a kosár esetet:
+            // Az onOptionsItemSelected-ben
             case R.id.cart:
                 Log.d(LOG_TAG, "Cart clicked!");
+                try {
+                    Intent intent = new Intent(this, CartActivity.class);
+                    startActivity(intent);
+                } catch (Exception e) {
+                    Log.e(LOG_TAG, "Hiba a kosár megnyitásakor", e);
+                    Toast.makeText(this, "Hiba történt a kosár megnyitásakor", Toast.LENGTH_SHORT).show();
+                }
                 return true;
             case R.id.view_selector:
                 if (viewRow) {
@@ -271,6 +360,10 @@ public class ShopListActivity extends AppCompatActivity {
         redCircle = (FrameLayout) rootView.findViewById(R.id.view_alert_red_circle);
         countTextView = (TextView) rootView.findViewById(R.id.view_alert_count_textview);
 
+        int cartItemCount = cartManager.getCartItems().size();
+        countTextView.setText(cartItemCount > 0 ? String.valueOf(cartItemCount) : "");
+        redCircle.setVisibility(cartItemCount > 0 ? VISIBLE : GONE);
+
         rootView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -281,14 +374,8 @@ public class ShopListActivity extends AppCompatActivity {
     }
 
     public void updateAlertIcon(ShoppingItem item) {
-        cartItems = (cartItems + 1);
-        if (0 < cartItems) {
-            countTextView.setText(String.valueOf(cartItems));
-        } else {
-            countTextView.setText("");
-        }
-
-        redCircle.setVisibility((cartItems > 0) ? VISIBLE : GONE);
+        cartManager.addToCart(item);
+        updateCartIcon(); // Frissítjük az ikont
 
         mItems.document(item._getId()).update("cartedCount", item.getCartedCount() + 1)
                 .addOnFailureListener(fail -> {
@@ -297,8 +384,6 @@ public class ShopListActivity extends AppCompatActivity {
 
         mNotificationHelper.send(item.getName());
         queryData();
-
-
     }
 
     @Override

@@ -8,6 +8,14 @@ import android.content.Intent;
 import android.graphics.Color;
 import android.os.Build;
 
+
+import android.Manifest;
+import android.content.Context;
+import android.content.pm.PackageManager;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
+import androidx.core.content.ContextCompat;
+
 import androidx.core.app.NotificationCompat;
 
 
@@ -42,6 +50,11 @@ public class NotificationHelper {
     }
 
     public void send(String message) {
+
+        if (!isConnectedToInternet()) {
+            return; // Ha nincs internetkapcsolat, ne küldjön értesítést
+        }
+
         Intent intent = new Intent(mContext, ShopListActivity.class);
         PendingIntent pendingIntent = PendingIntent.getActivity(mContext, NOTIFICATION_ID, intent, PendingIntent.FLAG_MUTABLE | PendingIntent.FLAG_UPDATE_CURRENT);
 
@@ -52,6 +65,16 @@ public class NotificationHelper {
                 .setContentIntent(pendingIntent);
 
         mNotifyManager.notify(NOTIFICATION_ID, builder.build());
+    }
+
+    private boolean isConnectedToInternet() {
+        if (ContextCompat.checkSelfPermission(mContext, Manifest.permission.ACCESS_NETWORK_STATE) != PackageManager.PERMISSION_GRANTED) {
+            return false; // Ha nincs engedély, nincs ellenőrzés
+        }
+
+        ConnectivityManager cm = (ConnectivityManager) mContext.getSystemService(Context.CONNECTIVITY_SERVICE);
+        NetworkInfo activeNetwork = cm.getActiveNetworkInfo();
+        return activeNetwork != null && activeNetwork.isConnected();
     }
 
     public void cancel() {
