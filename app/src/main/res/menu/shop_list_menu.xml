@@ -39,17 +39,23 @@
         >
     </item>
     <item
+        android:id="@+id/orders_button"
+        app:showAsAction="never"
+        android:icon="@drawable/ic_receipt"
+        android:title="Rendeléseim"
+        android:orderInCategory="1">
+    </item>
+    <item
+        android:id="@+id/profile_button"
+        app:showAsAction="never"
+        android:title="Profil"
+        android:orderInCategory="2" />
+    <item
         android:id="@+id/log_out_button"
         app:showAsAction="never"
         android:icon="@drawable/ic_exit"
         android:title="Kijelentkezés"
-        android:orderInCategory="2">
+        android:orderInCategory="3">
     </item>
-    <item
-        android:id="@+id/orders_button"
-        app:showAsAction="never"
-        android:icon="@drawable/ic_receipt"
-    android:title="Rendeléseim"
-    android:orderInCategory="1">
-</item>
+
 </menu>

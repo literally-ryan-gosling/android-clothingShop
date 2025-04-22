@@ -298,6 +298,16 @@ public class ShopListActivity extends AppCompatActivity {
             case R.id.sort_by_rating:
                 queryDataByRating();
                 return true;
+            case R.id.profile_button:
+                Log.d(LOG_TAG, "Profile clicked!");
+                try {
+                    Intent intent = new Intent(this, ProfileActivity.class);
+                    startActivity(intent);
+                } catch (Exception e) {
+                    Log.e(LOG_TAG, "Hiba a profil megnyitásakor", e);
+                    Toast.makeText(this, "Hiba történt a profil megnyitásakor", Toast.LENGTH_SHORT).show();
+                }
+                return true;
             case R.id.log_out_button:
                 Log.d(LOG_TAG, "Logout clicked!");
                 FirebaseAuth.getInstance().signOut();

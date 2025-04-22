@@ -17,4 +17,5 @@
     <color name="light_gray">#B8B5B5</color>
     <color name="addToCartBtn">#CF0404</color>
     <color name="deleteBtn">#06870B</color>
+    <color name="darkGreen">#309334</color>
 </resources>

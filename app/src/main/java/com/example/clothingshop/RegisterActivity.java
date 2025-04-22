@@ -20,6 +20,11 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.firestore.FirebaseFirestore;
+
+import java.util.HashMap;
+import java.util.Map;
 
 public class RegisterActivity extends AppCompatActivity implements AdapterView.OnItemSelectedListener {
     private static final String LOG_TAG = RegisterActivity.class.getName();
@@ -103,12 +108,33 @@ public class RegisterActivity extends AppCompatActivity implements AdapterView.O
         mAuth.createUserWithEmailAndPassword(email, password).addOnCompleteListener(this, task -> {
             if(task.isSuccessful()){
                 Log.d(LOG_TAG, "User created successfully");
+                FirebaseUser user = mAuth.getCurrentUser();
+                if (user != null) {
+                    FirebaseFirestore db = FirebaseFirestore.getInstance();
+
+                    Map<String, Object> userData = new HashMap<>();
+                    userData.put("username", userName);
+                    userData.put("email", email);
+                    userData.put("phone", phone);
+                    userData.put("phoneType", phoneType);
+                    userData.put("accountType", accountType);
+                    EditText addressEditText = findViewById(R.id.addressEditText);
+                    String shippingAddress = addressEditText.getText().toString();
+                    userData.put("shippingAddress", shippingAddress);
+
+
+                    db.collection("users").document(user.getUid())
+                            .set(userData)
+                            .addOnSuccessListener(aVoid -> Log.d(LOG_TAG, "User data added to Firestore"))
+                            .addOnFailureListener(e -> Log.e(LOG_TAG, "Error adding user data", e));
+                }
                 startShopping();
             } else {
                 Log.d(LOG_TAG, "User wasn't created successfully");
-                Toast.makeText(RegisterActivity.this, "User was't created successfully: " + task.getException().getMessage(), Toast.LENGTH_LONG).show();
+                Toast.makeText(RegisterActivity.this, "User wasn't created successfully: " + task.getException().getMessage(), Toast.LENGTH_LONG).show();
             }
         });
+
     }
 
     public void cancel(View view) {

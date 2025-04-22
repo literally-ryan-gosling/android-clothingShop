@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.example.clothingshop">
+
     <uses-permission android:name="android.permission.POST_NOTIFICATIONS" />
     <uses-permission android:name="android.permission.SET_ALARM" />
     <uses-permission android:name="android.permission.WAKE_LOCK" />
@@ -14,7 +15,13 @@
         android:roundIcon="@mipmap/app_logo_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.ClothingShop">
-
+        <activity
+            android:name=".ProfileActivity"
+            android:exported="false">
+            <meta-data
+                android:name="android.app.lib_name"
+                android:value="" />
+        </activity>
         <activity
             android:name=".OrdersActivity"
             android:exported="false">
@@ -38,7 +45,6 @@
         <service
             android:name=".NotificationJobService"
             android:permission="android.permission.BIND_JOB_SERVICE" />
-
 
         <activity android:name=".ShopListActivity" />
         <activity android:name=".RegisterActivity" />
