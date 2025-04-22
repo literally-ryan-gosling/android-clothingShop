@@ -11,6 +11,7 @@ public class ShoppingItem implements Serializable {
     private int imageResource;
     private int cartedCount;
     private int quantity = 1;
+    private String imageUrl;
 
     public ShoppingItem(String name, String info, String price, float ratedInfo, int imageResource, int cartedCount) {
         this.name = name;
@@ -21,8 +22,12 @@ public class ShoppingItem implements Serializable {
         this.cartedCount = cartedCount;
     }
 
-    public ShoppingItem() {
+    public void setImageUrl(String imageUrl) {
+        this.imageUrl = imageUrl;
     }
+
+    public ShoppingItem() {}
+
     public int getQuantity() {
         return quantity;
     }
@@ -31,12 +36,10 @@ public class ShoppingItem implements Serializable {
         this.quantity = quantity;
     }
 
-    // Helper metódus a mennyiség növeléséhez
     public void increaseQuantity() {
         this.quantity++;
     }
 
-    // Helper metódus a mennyiség csökkentéséhez
     public void decreaseQuantity() {
         if (this.quantity > 1) {
             this.quantity--;

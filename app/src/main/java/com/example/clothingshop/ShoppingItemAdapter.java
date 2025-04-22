@@ -22,7 +22,6 @@ import java.util.EventListener;
 public class ShoppingItemAdapter
         extends RecyclerView.Adapter<ShoppingItemAdapter.ViewHolder>
         implements Filterable {
-    // Member variables.
     private ArrayList<ShoppingItem> mShoppingData;
     private ArrayList<ShoppingItem> mSoppingDataAll;
     private Context mContext;
@@ -43,12 +42,8 @@ public class ShoppingItemAdapter
 
     @Override
     public void onBindViewHolder(ShoppingItemAdapter.ViewHolder holder, int position) {
-        // Get current sport.
         ShoppingItem currentItem = mShoppingData.get(position);
-
-        // Populate the textviews with data.
         holder.bindTo(currentItem);
-
 
         if(holder.getAdapterPosition() > lastPosition) {
             Animation animation = AnimationUtils.loadAnimation(mContext, R.anim.slide_in_row);
@@ -62,10 +57,6 @@ public class ShoppingItemAdapter
         return mShoppingData.size();
     }
 
-
-    /**
-     * RecycleView filter
-     * **/
     @Override
     public Filter getFilter() {
         return shoppingFilter;
@@ -103,7 +94,6 @@ public class ShoppingItemAdapter
     };
 
     class ViewHolder extends RecyclerView.ViewHolder {
-        // Member Variables for the TextViews
         private TextView mTitleText;
         private TextView mInfoText;
         private TextView mPriceText;
@@ -113,7 +103,6 @@ public class ShoppingItemAdapter
         ViewHolder(View itemView) {
             super(itemView);
 
-            // Initialize the views.
             mTitleText = itemView.findViewById(R.id.itemTitle);
             mInfoText = itemView.findViewById(R.id.subTitle);
             mItemImage = itemView.findViewById(R.id.itemImage);
@@ -127,7 +116,6 @@ public class ShoppingItemAdapter
             mPriceText.setText(currentItem.getPrice());
             mRatingBar.setRating(currentItem.getRatedInfo());
 
-            // Load the images into the ImageView using the Glide library.
             Glide.with(mContext).load(currentItem.getImageResource()).into(mItemImage);
 
             itemView.findViewById(R.id.add_to_cart).setOnClickListener(view -> ((ShopListActivity)mContext).updateAlertIcon(currentItem));

@@ -122,7 +122,7 @@ public class ShopListActivity extends AppCompatActivity {
         mJobScheduler = (JobScheduler) getSystemService(JOB_SCHEDULER_SERVICE);
 
         cartManager = new CartManager(this);
-        // setAlarmManager();
+        setAlarmManager();
         setJobScheduler();
     }
 
@@ -136,7 +136,6 @@ public class ShopListActivity extends AppCompatActivity {
         }
     }
 
-    // Új segédfüggvény a kosár ikon frissítésére
     private void updateCartIcon() {
         int cartItemCount = cartManager.getCartItems().size();
         countTextView.setText(cartItemCount > 0 ? String.valueOf(cartItemCount) : "");
@@ -203,12 +202,9 @@ public class ShopListActivity extends AppCompatActivity {
                         queryData();
                     }
 
-                    // Notify the adapter of the change.
                     mAdapter.notifyDataSetChanged();
                 });
     }
-
-
 
     public void deleteItem(ShoppingItem item) {
         DocumentReference ref = mItems.document(item._getId());
@@ -282,7 +278,6 @@ public class ShopListActivity extends AppCompatActivity {
     private void togglePriceSorting() {
         isPriceDescending = !isPriceDescending; // Váltunk a két állapot között
 
-        // Ikon frissítése
         sortMenuItem.setIcon(isPriceDescending ?
                 R.drawable.ic_arrow_down :
                 R.drawable.ic_arrow_up);
@@ -308,10 +303,15 @@ public class ShopListActivity extends AppCompatActivity {
                 FirebaseAuth.getInstance().signOut();
                 finish();
                 return true;
-            case R.id.settings_button:
-                Log.d(LOG_TAG, "Setting clicked!");
-                FirebaseAuth.getInstance().signOut();
-                finish();
+            case R.id.orders_button:
+                Log.d(LOG_TAG, "Orders clicked!");
+                try {
+                    Intent intent = new Intent(this, OrdersActivity.class);
+                    startActivity(intent);
+                } catch (Exception e) {
+                    Log.e(LOG_TAG, "Hiba a rendelések megnyitásakor", e);
+                    Toast.makeText(this, "Hiba történt a rendelések megnyitásakor", Toast.LENGTH_SHORT).show();
+                }
                 return true;
             case R.id.cart:
                 Log.d(LOG_TAG, "Cart clicked!");
@@ -365,7 +365,7 @@ public class ShopListActivity extends AppCompatActivity {
 
     public void updateAlertIcon(ShoppingItem item) {
         cartManager.addToCart(item);
-        updateCartIcon(); // Frissítjük az ikont
+        updateCartIcon();
 
         mItems.document(item._getId()).update("cartedCount", item.getCartedCount() + 1)
                 .addOnFailureListener(fail -> {
@@ -388,7 +388,11 @@ public class ShopListActivity extends AppCompatActivity {
         long triggerTime = SystemClock.elapsedRealtime() + repeatInterval;
 
         Intent intent = new Intent(this, AlarmReceiver.class);
-        PendingIntent pendingIntent = PendingIntent.getBroadcast(this, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT);
+        PendingIntent pendingIntent = PendingIntent.getBroadcast(
+                this,
+                0,
+                intent,
+                PendingIntent.FLAG_IMMUTABLE);
 
         mAlarmManager.setInexactRepeating(
                 AlarmManager.ELAPSED_REALTIME_WAKEUP,

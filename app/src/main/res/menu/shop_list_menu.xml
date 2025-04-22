@@ -46,10 +46,10 @@
         android:orderInCategory="2">
     </item>
     <item
-        android:id="@+id/settings_button"
+        android:id="@+id/orders_button"
         app:showAsAction="never"
-        android:icon="@drawable/ic_settings"
-        android:title="Beállítás"
-        android:orderInCategory="1">
-    </item>
+        android:icon="@drawable/ic_receipt"
+    android:title="Rendeléseim"
+    android:orderInCategory="1">
+</item>
 </menu>

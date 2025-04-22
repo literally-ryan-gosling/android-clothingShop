@@ -12,9 +12,11 @@ import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.FirebaseFirestore;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -26,11 +28,13 @@ public class CartActivity extends AppCompatActivity {
     private TextView mTotalPrice;
     private Button mClearCart, mCheckout;
     private CartManager cartManager;
+    private FirebaseFirestore mFirestore;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_cart);
+        mFirestore = FirebaseFirestore.getInstance();
 
         try {
             mRecyclerView = findViewById(R.id.cartRecyclerView);
@@ -112,10 +116,17 @@ public class CartActivity extends AppCompatActivity {
             return;
         }
 
-        FirebaseFirestore.getInstance().collection("Orders").add(createOrderData())
+        Order order = new Order();
+        order.setUserId(FirebaseAuth.getInstance().getCurrentUser().getUid());
+        order.setItems(new ArrayList<>(mCartItems));
+        order.setTotal(cartManager.calculateTotalPrice());
+        order.setDate(new Date());
+
+        mFirestore.collection("Orders")
+                .add(order)
                 .addOnSuccessListener(documentReference -> {
                     Toast.makeText(this, "Rendelés elküldve", Toast.LENGTH_SHORT).show();
-                    clearCart();
+                    cartManager.clearCart();
                     finish();
                 });
     }

@@ -69,13 +69,18 @@ public class NotificationHelper {
 
     private boolean isConnectedToInternet() {
         if (ContextCompat.checkSelfPermission(mContext, Manifest.permission.ACCESS_NETWORK_STATE) != PackageManager.PERMISSION_GRANTED) {
-            return false; // Ha nincs engedély, nincs ellenőrzés
+            return false;
         }
 
         ConnectivityManager cm = (ConnectivityManager) mContext.getSystemService(Context.CONNECTIVITY_SERVICE);
-        NetworkInfo activeNetwork = cm.getActiveNetworkInfo();
-        return activeNetwork != null && activeNetwork.isConnected();
+        if (cm != null) {
+            android.net.Network network = cm.getActiveNetwork();
+            android.net.NetworkCapabilities capabilities = cm.getNetworkCapabilities(network);
+            return capabilities != null && capabilities.hasCapability(android.net.NetworkCapabilities.NET_CAPABILITY_INTERNET);
+        }
+        return false;
     }
+
 
     public void cancel() {
         mNotifyManager.cancel(NOTIFICATION_ID);
